@@ -7,7 +7,7 @@
 #define ngiun 7
 
 TooN::Vector<ngiun> q;
-int prova=1;
+int joint_init=1;
 
 void Callback(const std_msgs::Float64MultiArray& msg)
 {
@@ -16,7 +16,7 @@ void Callback(const std_msgs::Float64MultiArray& msg)
 	{
 	   q[i]=msg.data[i];
 	}
-	prova=0;
+	joint_init=0;
 }
 
 int main(int argc, char **argv)
@@ -29,7 +29,7 @@ int main(int argc, char **argv)
   ros::Subscriber joint_sub = n.subscribe("/joints_position", 1, Callback);
   ros::Publisher pub_joint_command = n.advertise<iiwa_msgs::JointPosition>("/iiwa/command/JointPosition", 1);
 
-   while(prova)
+   while(joint_init)
    {
     ros::spinOnce();
    }
@@ -51,6 +51,6 @@ int main(int argc, char **argv)
     ros::spinOnce();
     loop_rate.sleep();
   }
-  prova=1; 
+  joint_init=1; 
 
 }
