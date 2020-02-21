@@ -4,6 +4,7 @@
 #include "geometry_msgs/PoseStamped.h"
 #include "geometry_msgs/TwistStamped.h"
 #include <std_msgs/Float64MultiArray.h> 
+#include <std_msgs/Bool.h>
 
 #define dim_T 4
 
@@ -22,6 +23,8 @@ Vector<3> vel;
 UnitQuaternion quat;
 Vector<3> w;
 
+bool stop=false;
+
 Matrix<4,4> T_init;
 
 Matrix<dim_T,dim_T> n_T_e=Data(     -1.0000,         0,   -0.0000,         0,
@@ -30,6 +33,11 @@ Matrix<dim_T,dim_T> n_T_e=Data(     -1.0000,         0,   -0.0000,         0,
          									 0      ,   0,         0,         1.0000);
             									
 LBRiiwa7 iiwa=LBRiiwa7(n_T_e,2.0,"kuka");
+
+void Callback_abilitation(const std_msgs::Bool& en){
+      cout<<"Disabled!"<<endl;
+		stop=en.data;
+}   
 
 void sub_joint_state_cb(const iiwa_msgs::JointPosition& msg)
 {
@@ -88,7 +96,8 @@ int main(int argc, char*argv[]){
 	ros::Subscriber sub = nh.subscribe("iiwa/state/JointPosition", 1, sub_joint_state_cb);
 	ros::Subscriber sub_pose=nh.subscribe("/desired_pose",1,sub_desired_pose_cb);
 	ros::Subscriber sub_twist=nh.subscribe("/desired_twist",1,sub_desired_twist_cb);
-    ros::Publisher pub_joints = nh.advertise<std_msgs::Float64MultiArray>("joints_position", 1);
+   ros::Publisher pub_joints = nh.advertise<std_msgs::Float64MultiArray>("joints_position", 1);
+   ros::Subscriber sub_en=nh.subscribe("stop_clik",1,Callback_abilitation); 
 
 	
 	while(ros::ok() && !joint_ok_init){
@@ -122,7 +131,7 @@ int main(int argc, char*argv[]){
 
     double time_now = ros::Time::now().toSec();
 
-    while(ros::ok()){
+    while(ros::ok() && stop==false){
 				
 		ros::spinOnce();
 		
@@ -183,5 +192,10 @@ int main(int argc, char*argv[]){
         loop_rate.sleep();
 
     }
+    cout<<"Stop: "<<stop<<endl;
+    Matrix<4,4> Tf;
+    Tf=iiwa.fkine(qDH_k);
+    //cout<<"Tf: "<<endl<<Tf;
+    cout<<"Posizione finale raggiunta: "<<Tf[0][3]<<" "<<Tf[1][3]<<" "<<Tf[2][3]<<endl;
     return 0;
 }

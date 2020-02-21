@@ -46,7 +46,7 @@ using namespace std;
 
 #define MAX_DEPTH 0.40
 
-int NUM_KEYPOINTS=11; 
+int NUM_KEYPOINTS=4; 
 
 ros::Publisher cmdvel;
 ros::Publisher current_pose;

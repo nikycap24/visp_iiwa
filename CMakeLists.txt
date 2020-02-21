@@ -148,6 +148,7 @@ add_executable(clik src/clik.cpp)
 add_executable(pre_grasp_to_grasp src/pre_grasp_to_grasp.cpp)
 add_executable(pre_visual_servoing src/pre_visual_servoing.cpp)
 add_executable(iiwa_move_to src/iiwa_move_to.cpp)
+add_executable(place src/place.cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -163,7 +164,8 @@ add_executable(iiwa_move_to src/iiwa_move_to.cpp)
  add_dependencies(clik ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
  add_dependencies(pre_grasp_to_grasp ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
  add_dependencies(pre_visual_servoing ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-  add_dependencies(iiwa_move_to ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+ add_dependencies(iiwa_move_to ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+ add_dependencies(place ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
@@ -187,6 +189,9 @@ target_link_libraries(pre_visual_servoing
    ${catkin_LIBRARIES} 
  )
 target_link_libraries(iiwa_move_to
+   ${catkin_LIBRARIES} 
+ )
+ target_link_libraries(place
    ${catkin_LIBRARIES} 
  )
 #############

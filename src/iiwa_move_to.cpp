@@ -12,7 +12,7 @@ using namespace TooN;
 
 Vector<7> q0,qf;
            								
-double tf=20.0;
+double tf=25.0;
 bool joint_ok_init=false;
 iiwa_msgs::JointPosition current_joint_position;
 	

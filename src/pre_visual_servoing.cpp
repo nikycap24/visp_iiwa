@@ -59,6 +59,8 @@ void readJointPos(const iiwa_msgs::JointPosition& msg)
 
 ros::ServiceClient client;
 
+ros::Publisher pub_stop;
+
 cv_bridge::CvImagePtr cv_ptr;
 int DEPTH_HEIGHT, DEPTH_WIDTH;
 
@@ -128,6 +130,12 @@ void readObjectCenter(const std::string& obj){
     }
     else {
     cout<<"Object not recognized!"<<endl;
+    for(int i=0; i<20; i++){
+			stop_traj.data = 1; // sending signal to stop clik                         
+			pub_stop.publish(stop_traj);
+			ros::spinOnce();
+    	}
+    
     }
 }
 /*-------------------------------------------------------*/
@@ -147,7 +155,7 @@ int main(int argc, char **argv){
    ros::Subscriber depth_sub= n.subscribe("/camera/aligned_depth_to_color/image_raw", 1, readDepth);
    ros::Publisher pub_joints_pose = n.advertise<geometry_msgs::PoseStamped>("/desired_pose", 1);
    ros::Publisher pub_joints_twist = n.advertise<geometry_msgs::TwistStamped>("/desired_twist", 1);
-   ros::Publisher pub_stop = n.advertise<std_msgs::Bool>("stop_clik", 1);
+   pub_stop = n.advertise<std_msgs::Bool>("stop_clik", 1);
    /*--------------------------------------------------------------------*/
 
    // SERVER CLIENTS
@@ -170,19 +178,84 @@ int main(int argc, char **argv){
     Vector<> q_DH= iiwa.joints_Robot2DH(q0);
     Matrix<4,4> T_init = iiwa.fkine(q_DH);
 
-    cout<<"T_init: "<<endl<<T_init<<endl;
+   /* cout<<"T_init: "<<endl<<T_init<<endl;
+    
+    while(ros::ok()){
+
+   }*/
 
     Vector<3> pi=transl(T_init);
     
     readObjectCenter(argv[1]);
     
     cout<<"x_obj: "<<x_obj<<"  y_obj: "<<y_obj<<endl;
-
-    Vector<> pf_tilde=makeVector(x_obj,y_obj,0.70,1.0);
+    Vector<4> pf_tilde;
+    Matrix<3,3> Rf=Identity;
+    
+    string object=" ";
+    object=argv[1];
+    
+    if(object=="balea" || object=="denkmit_oriz"){
+   
+    pf_tilde=makeVector(x_obj,y_obj,0.40,1.0);
+    
+    Rf= Data( -1.59638e-06, -0.965971, 0.258536,
+				  -1,         5.87886e-05, 0.000213478,
+				  -0.000221426, -0.258536, -0.965971); 
+    }    
+    else if(object=="finish"){
+    
+    cout<<"finish"<<endl;
+    
+    pf_tilde=makeVector(x_obj,y_obj,0.30,1.0);
+   
+    Rf= Data( -0.0105271, -0.269526, 0.962905,
+              -0.999872, -0.00875426, -0.013381,
+              0.0120368, -0.962922, -0.269399); //già modificata
+      
+    }
+    
+    else if(object=="heitmann"){
+        cout<<"heitmann"<<endl;
+    pf_tilde=makeVector(x_obj,y_obj,0.40,1.0);
+   
+    Rf= Data( -0.0105271, -0.269526, 0.962905,
+              -0.999872, -0.00875426, -0.013381,
+              0.0120368, -0.962922, -0.269399); //già modificata
+    }
+    
+    else if(object==" "){
+    cout<<"Object name is not correct"<<endl;
+    
+     	for(int i=0; i<20; i++){
+			stop_traj.data = 1; // sending signal to stop clik                         
+			pub_stop.publish(stop_traj);
+			ros::spinOnce();
+    	}
+    }
+    
     Vector<> pf_b_tilde=T_init*pf_tilde;
     Vector<> pf_b=pf_b_tilde.slice(0,3);
+    if(object=="heitmann"){
     pf_b[0] = 0.65;
-    pf_b[2]+=0.16;
+    pf_b[1]+=0.08;
+    pf_b[2]+=0.05;}
+    
+    if(object=="finish"){
+    pf_b[0] = 0.65;
+    pf_b[1]+=0.08;
+    pf_b[2]+=0.05;}
+    
+    if(object=="balea"){
+    //pf_b[0] = 0.65;
+    //pf_b[1]+=0.08;
+    pf_b[2] = 0.45;}
+    
+    if(object=="denkmit_oriz"){
+    //pf_b[0] = 0.65;
+    //pf_b[1]+=0.08;
+    pf_b[2] = 0.45;}
+    
     if (pf_b[2] < 0.32){
     	pf_b[2] = 0.35;
     }
@@ -193,10 +266,6 @@ int main(int argc, char **argv){
     Vector<3> Qi_v=Qi.getV();
     double Qi_s=Qi.getS();
     
-    Matrix<3,3> Rf= Data( 0.00490178, -0.255926, 0.966653,
-                         -0.999988, -0.0016874, 0.00462377,
-                          0.000447815, -0.966664, -0.255931);
-
     UnitQuaternion Qf(Rf);
     Vector<3> Qf_v=Qf.getV();
     double Qf_s=Qf.getS();
@@ -224,7 +293,7 @@ int main(int argc, char **argv){
 		 
 		 UnitQuaternion Q_now=Qi.interp(Qf,s_pos.getPosition(time_now),false);
 		 
-		 cout<<"pf: "<<final_position[0]<<" "<<final_position[1]<<" "<<final_position[2]<<endl;		 
+		 //cout<<"pf: "<<final_position[0]<<" "<<final_position[1]<<" "<<final_position[2]<<endl;		 
         
 		 geometry_msgs::PoseStamped posemsg;
 		 geometry_msgs::TwistStamped twistmsg;
