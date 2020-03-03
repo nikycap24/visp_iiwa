@@ -155,7 +155,7 @@ int main(int argc, char **argv)
     						Zeros(6), //Errore in posizione
     						J, //Jacobiano: Deve essere quello geomentrico o analitico a seconda dei casi! CONTROLLARE!
     						veld, // Velocità desiderata
-    						gain, //guadagno del clik
+    						1/T_s, //guadagno del clik
     						T_s, // Passo di campionamento: DEVE ESSERE UGUALE AL LOOP RATE!!!!
     						secondary_gain, // Guadagno dell'obj secondario (se volete metterlo) 
     						// qsegn, NO! QUESTO NON VA BENE!

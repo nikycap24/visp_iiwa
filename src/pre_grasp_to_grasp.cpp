@@ -108,12 +108,12 @@ int main(int argc, char **argv){
     displacement_x = 0.0;
     }
     else if(object=="finish") {
-    displacement_x = 0.12414;
-    displacement_z = 0.025;
+    displacement_x = 0.15014;
+    displacement_z = 0.00;
     }   
     else if(object=="heitmann") {
-    displacement_x = 0.1111;
-    displacement_z = 0.02;
+    displacement_x = 0.1451;
+    displacement_z = 0.00;
     }
     else{
     cout<<"Object name is not correct"<<endl;

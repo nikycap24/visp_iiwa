@@ -239,12 +239,14 @@ int main(int argc, char **argv){
     if(object=="heitmann"){
     pf_b[0] = 0.65;
     pf_b[1]+=0.08;
-    pf_b[2]+=0.05;}
+    pf_b[2]-=0.08;}
     
     if(object=="finish"){
+    cout<<"FINISH "<<endl;
     pf_b[0] = 0.65;
     pf_b[1]+=0.08;
-    pf_b[2]+=0.05;}
+    pf_b[2]-=0.08;
+    }
     
     if(object=="balea"){
     //pf_b[0] = 0.65;
