@@ -194,9 +194,9 @@ try {
     vpImageConvert::convert(I, cvI);
     vpKltOpencv tracker;
     // Set tracker parameters
-    tracker.setMaxFeatures(500);
+    tracker.setMaxFeatures(100);
     tracker.setWindowSize(10);
-    tracker.setQuality(0.01);
+    tracker.setQuality(0.1);
     tracker.setMinDistance(100);
     tracker.setHarrisFreeParameter(0.04);
     tracker.setBlockSize(9);
