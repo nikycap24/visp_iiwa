@@ -53,8 +53,7 @@ using namespace std;
 
 #define MAX_DEPTH 0.50
 #define MIN_DEPTH 0.10
-
-int NUM_KEYPOINTS=10; 
+#define NUM_KEYPOINTS=10; 
 
 ros::Publisher cmdvel;
 ros::Publisher current_pose;
