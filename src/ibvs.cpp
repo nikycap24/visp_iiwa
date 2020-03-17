@@ -259,15 +259,15 @@ try {
 	 //vpKeyPoint::vpFilterMatchingType filterType = vpKeyPoint::ratioDistanceThreshold;
 	 vpKeyPoint keypoint;
 	 keypoint.setDetector(detectorName);
-    keypoint.setExtractor(extractorName);
-    keypoint.setMatcher(matcherName);
-    keypoint.setFilterMatchingType(vpKeyPoint::ratioDistanceThreshold);
-    keypoint.setMatchingRatioThreshold(0.5);
-    keypoint.setUseRansacVVS(true);
-    keypoint.setUseRansacConsensusPercentage(true);
-    keypoint.setRansacConsensusPercentage(20.0);
-    keypoint.setRansacIteration(200);
-    keypoint.setRansacThreshold(0.005);
+         keypoint.setExtractor(extractorName);
+         keypoint.setMatcher(matcherName);
+         keypoint.setFilterMatchingType(vpKeyPoint::ratioDistanceThreshold);
+         keypoint.setMatchingRatioThreshold(0.5);
+         keypoint.setUseRansacVVS(true);
+         keypoint.setUseRansacConsensusPercentage(true);
+         keypoint.setRansacConsensusPercentage(20.0);
+         keypoint.setRansacIteration(200);
+         keypoint.setRansacThreshold(0.005);
 	 
 	 
 	 unsigned int nbMatch = keypoint.matchPoint(Idisp);
@@ -283,10 +283,10 @@ try {
     vpServo task;
     task.setServo(vpServo::EYEINHAND_CAMERA);
     task.setInteractionMatrixType(vpServo::DESIRED, vpServo::PSEUDO_INVERSE);
-    vpAdaptiveGain lambda(0.8, 0.05, 30);   // Guadago adattativo : lambda(0)=4, lambda(oo)=0.4 and lambda'(0)=30
+    vpAdaptiveGain lambda(0.8, 0.1, 30);   // Adaptative gain : lambda(0)=0.8, lambda(oo)=0.1 and lambda'(0)=30
     task.setLambda(lambda);
     bool has_converged = false;
-    double convergence_threshold = 0.008;
+    double convergence_threshold = 0.005;
 
     
   
