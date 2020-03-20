@@ -282,7 +282,7 @@ try {
     vpServo task;
     task.setServo(vpServo::EYEINHAND_CAMERA);
     task.setInteractionMatrixType(vpServo::DESIRED, vpServo::PSEUDO_INVERSE);
-    vpAdaptiveGain lambda(0.8, 0.1, 30);   // Adaptative gain : lambda(0)=0.8, lambda(oo)=0.1 and lambda'(0)=30
+    vpAdaptiveGain lambda(0.8, 0.1, 30);   
     task.setLambda(lambda);
     bool has_converged = false;
     double convergence_threshold = 0.005;
