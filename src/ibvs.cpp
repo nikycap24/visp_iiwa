@@ -326,8 +326,8 @@ try {
    		zd[i].set_y(0.0);
    		zd[i].set_Z(1.0);
 	    
-      	task.addFeature(s_cur[i], sd[i]);
-      	task.addFeature(z_cur[i], zd[i]);
+      	task.addFeature(p_cur[i], pd[i]); //s e s*
+      	task.addFeature(z_cur[i], zd[i]); // featureDepth z e z*
    }
 			 
 	std::vector<vpImagePoint> iPref, iPcur;
