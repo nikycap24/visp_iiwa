@@ -325,7 +325,8 @@ try {
    		zd[i].set_x(0.0);
    		zd[i].set_y(0.0);
    		zd[i].set_Z(1.0);
-      	task.addFeature(p_cur[i], pd[i]);
+	    
+      	task.addFeature(s_cur[i], sd[i]);
       	task.addFeature(z_cur[i], zd[i]);
    }
 			 
